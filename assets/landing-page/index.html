@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3my AI — AI Systems That Run Your Business 24/7</title>
+    <meta name="description" content="We build custom AI agents that automate your business workflows. Inbox automation, lead response, document intelligence, customer support AI — deployed and managed for you.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --bg2: #0f0f1a;
+            --bg3: #1a1a2e;
+            --card: #12121f;
+            --border: #1e1e35;
+            --border-glow: #2a2a4a;
+            --text: #e8e8f0;
+            --text2: #8888a0;
+            --text3: #555570;
+            --accent: #6366f1;
+            --accent2: #818cf8;
+            --accent-glow: rgba(99, 102, 241, 0.15);
+            --cyan: #06b6d4;
+            --green: #10b981;
+            --orange: #f59e0b;
+            --red: #ef4444;
+            --gradient1: linear-gradient(135deg, #6366f1 0%, #06b6d4 50%, #10b981 100%);
+            --gradient2: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 6px;
+            --shadow: 0 8px 32px rgba(0,0,0,0.4);
+            --shadow-lg: 0 16px 64px rgba(0,0,0,0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-mesh {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bg-mesh::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(6, 182, 212, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 60% 80%, rgba(16, 185, 129, 0.03) 0%, transparent 50%);
+            animation: meshFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes meshFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(2%, -2%) rotate(1deg); }
+            66% { transform: translate(-1%, 1%) rotate(-0.5deg); }
+        }
+
+        /* Grid lines */
+        .grid-lines {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 16px 24px;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-weight: 800;
+            font-size: 1.3rem;
+            background: var(--gradient1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        nav .nav-links a {
+            color: var(--text2);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav .nav-links a:hover { color: var(--text); }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius-xs);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient2);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            background: var(--accent-glow);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 160px 0 100px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: var(--accent-glow);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--accent2);
+            margin-bottom: 32px;
+            font-weight: 500;
+        }
+
+        .hero-badge .pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.5); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 .gradient {
+            background: var(--gradient1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text2);
+            max-width: 640px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .number {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-item .label {
+            font-size: 0.8rem;
+            color: var(--text3);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* Marquee */
+        .marquee-section {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 60px;
+            animation: marquee 30s linear infinite;
+            width: max-content;
+        }
+
+        .marquee-item {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text3);
+            white-space: nowrap;
+        }
+
+        .marquee-item .dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin: 0 24px 2px;
+            vertical-align: middle;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Section styles */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-header p {
+            color: var(--text2);
+            font-size: 1.1rem;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        /* Pain Points */
+        .pain-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .pain-card {
+            padding: 32px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
+        }
+
+        .pain-card:hover {
+            border-color: var(--border-glow);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+
+        .pain-card .icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        .pain-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .pain-card p {
+            color: var(--text2);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .pain-card .stat {
+            margin-top: 16px;
+            font-size: 0.8rem;
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        /* Services / Packages */
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .package-card {
+            padding: 36px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            position: relative;
+            transition: all 0.4s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .package-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.1);
+        }
+
+        .package-card.featured {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, transparent 60%);
+        }
+
+        .package-card.featured::before {
+            content: 'POPULAR';
+            position: absolute;
+            top: 0;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            padding: 4px 10px;
+            border-radius: 0 0 6px 6px;
+        }
+
+        .package-card .pkg-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .package-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .package-card .desc {
+            color: var(--text2);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .package-card .price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .package-card .price span {
+            font-size: 1rem;
+            color: var(--text3);
+            font-weight: 500;
+        }
+
+        .package-card .features {
+            list-style: none;
+            margin: 24px 0;
+            flex: 1;
+        }
+
+        .package-card .features li {
+            padding: 8px 0;
+            font-size: 0.9rem;
+            color: var(--text2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .package-card .features li::before {
+            content: '→';
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .package-card .btn {
+            width: 100%;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* How it works */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            position: relative;
+        }
+
+        .steps-grid::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--cyan), var(--green), var(--accent));
+            z-index: 0;
+            opacity: 0.2;
+        }
+
+        .step-card {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 56px;
+            height: 56px;
+            background: var(--bg3);
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--accent2);
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .step-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .step-card p {
+            color: var(--text2);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Technology */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .tech-card {
+            padding: 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .tech-card:hover {
+            border-color: var(--border-glow);
+            background: var(--bg3);
+        }
+
+        .tech-card .tech-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .tech-card h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .tech-card p {
+            font-size: 0.8rem;
+            color: var(--text3);
+        }
+
+        /* About */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-image {
+            aspect-ratio: 1;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, transparent 60%);
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .about-text p {
+            color: var(--text2);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .about-stat {
+            padding: 20px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .about-stat .num {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-stat .lbl {
+            font-size: 0.8rem;
+            color: var(--text3);
+            margin-top: 4px;
+        }
+
+        /* CTA */
+        .cta-section {
+            text-align: center;
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .cta-box {
+            padding: 60px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(6, 182, 212, 0.05) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
+            animation: ctaGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes ctaGlow {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(10%, 10%); }
+        }
+
+        .cta-box h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .cta-box p {
+            color: var(--text2);
+            font-size: 1.1rem;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .cta-box .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        footer .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            background: var(--gradient1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        footer .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        footer .footer-links a {
+            color: var(--text3);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        footer .footer-links a:hover { color: var(--text); }
+
+        footer .copy {
+            color: var(--text3);
+            font-size: 0.8rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .pain-grid, .packages-grid { grid-template-columns: repeat(2, 1fr); }
+            .steps-grid { grid-template-columns: repeat(2, 1fr); }
+            .steps-grid::before { display: none; }
+            .tech-grid { grid-template-columns: repeat(2, 1fr); }
+            .about-grid { grid-template-columns: 1fr; gap: 40px; }
+            .about-image { max-width: 300px; margin: 0 auto; }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .pain-grid, .packages-grid, .tech-grid { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            .hero { padding: 120px 0 60px; }
+            section { padding: 60px 0; }
+            .cta-box { padding: 40px 24px; }
+            nav .nav-links { gap: 16px; }
+            nav .nav-links .btn { padding: 8px 16px; font-size: 0.8rem; }
+        }
+
+        /* Scroll animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Floating orb decoration */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            top: 10%;
+            right: -100px;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--cyan);
+            bottom: 20%;
+            left: -100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-mesh"></div>
+    <div class="grid-lines"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">3my AI</div>
+        <div class="nav-links">
+            <a href="#services">Services</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#about">About</a>
+            <a href="/form.html" class="btn btn-primary">Book Free Audit →</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">
+                <span class="pulse"></span>
+                Now accepting new clients — 3 spots available
+            </div>
+            <h1>
+                AI Systems That<br>
+                <span class="gradient">Run Your Business 24/7</span>
+            </h1>
+            <p>
+                We build custom AI agents that handle your repetitive work — email, leads, documents, support, content — so you can focus on growing your business.
+            </p>
+            <div class="hero-buttons">
+                <a href="/form.html" class="btn btn-primary">Get Your Free AI Audit →</a>
+                <a href="#services" class="btn btn-outline">View Services</a>
+            </div>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="number">25+</div>
+                    <div class="label">AI Models</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">37</div>
+                    <div class="label">Agent Types</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">200+</div>
+                    <div class="label">API Endpoints</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">24/7</div>
+                    <div class="label">Autonomous</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee-section">
+        <div class="marquee-track">
+            <span class="marquee-item">AI Email Automation</span><span class="dot"></span>
+            <span class="marquee-item">Lead Response Systems</span><span class="dot"></span>
+            <span class="marquee-item">Document Intelligence</span><span class="dot"></span>
+            <span class="marquee-item">Customer Support AI</span><span class="dot"></span>
+            <span class="marquee-item">Content Production</span><span class="dot"></span>
+            <span class="marquee-item">Workflow Automation</span><span class="dot"></span>
+            <span class="marquee-item">Multi-Agent Systems</span><span class="dot"></span>
+            <span class="marquee-item">AI Email Automation</span><span class="dot"></span>
+            <span class="marquee-item">Lead Response Systems</span><span class="dot"></span>
+            <span class="marquee-item">Document Intelligence</span><span class="dot"></span>
+            <span class="marquee-item">Customer Support AI</span><span class="dot"></span>
+            <span class="marquee-item">Content Production</span><span class="dot"></span>
+            <span class="marquee-item">Workflow Automation</span><span class="dot"></span>
+            <span class="marquee-item">Multi-Agent Systems</span><span class="dot"></span>
+        </div>
+    </div>
+
+    <!-- Pain Points -->
+    <section id="problems">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>Sound Familiar?</h2>
+                <p>These are the problems we solve every day</p>
+            </div>
+            <div class="pain-grid">
+                <div class="pain-card fade-up">
+                    <div class="icon">📧</div>
+                    <h3>Email Overload</h3>
+                    <p>Your team spends hours every day sorting, reading, and replying to emails. Important messages get buried in the noise.</p>
+                    <div class="stat">→ Avg. 28% of workweek spent on email</div>
+                </div>
+                <div class="pain-card fade-up">
+                    <div class="icon">⏰</div>
+                    <h3>Slow Lead Response</h3>
+                    <p>Leads go cold because your team can't respond fast enough. Every minute of delay costs you conversions.</p>
+                    <div class="stat">→ 78% of leads go to the first responder</div>
+                </div>
+                <div class="pain-card fade-up">
+                    <div class="icon">📄</div>
+                    <h3>Manual Document Work</h3>
+                    <p>Contracts, invoices, reports — your team manually reads and extracts data from documents every single day.</p>
+                    <div class="stat">→ 2-3 hours/day wasted on manual review</div>
+                </div>
+                <div class="pain-card fade-up">
+                    <div class="icon">🎧</div>
+                    <h3>Support Bottleneck</h3>
+                    <p>Your support team is overwhelmed. Customers wait hours for simple answers. Response quality drops as volume increases.</p>
+                    <div class="stat">→ 70% of support tickets are repetitive</div>
+                </div>
+                <div class="pain-card fade-up">
+                    <div class="icon">✍️</div>
+                    <h3>Content Bottleneck</h3>
+                    <p>You need content to grow but writing takes time. Your team is too busy with operations to create consistently.</p>
+                    <div class="stat">→ 67% of marketers say content is their #1 challenge</div>
+                </div>
+                <div class="pain-card fade-up">
+                    <div class="icon">🔄</div>
+                    <h3>Repetitive Workflows</h3>
+                    <p>Data entry, form processing, report generation — your team does the same tasks over and over. It's not a good use of talent.</p>
+                    <div class="stat">→ 40% of work time is repetitive tasks</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services / Packages -->
+    <section id="services">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>AI Solutions, <span class="gradient">Ready to Deploy</span></h2>
+                <p>Each solution is built, tested, and managed by our AI team. You get results, not code.</p>
+            </div>
+            <div class="packages-grid">
+                <div class="package-card fade-up">
+                    <div class="pkg-icon">📬</div>
+                    <h3>Inbox Zero</h3>
+                    <p class="desc">AI that reads, sorts, prioritizes, and drafts replies to your emails. Your inbox, on autopilot.</p>
+                    <div class="price">$2,000<span>/mo</span></div>
+                    <ul class="features">
+                        <li>Auto-sort & prioritize emails</li>
+                        <li>Draft reply suggestions</li>
+                        <li>Smart categorization</li>
+                        <li>Gmail / Outlook integration</li>
+                        <li>Weekly performance reports</li>
+                    </ul>
+                    <a href="/form.html" class="btn btn-outline">Get Started →</a>
+                </div>
+                <div class="package-card featured fade-up">
+                    <div class="pkg-icon">🎯</div>
+                    <h3>LeadBot</h3>
+                    <p class="desc">Captures leads from any source, qualifies them, and routes them to your sales team — 24/7.</p>
+                    <div class="price">$3,000<span>/mo</span></div>
+                    <ul class="features">
+                        <li>24/7 lead capture & response</li>
+                        <li>AI qualification scoring</li>
+                        <li>CRM integration (any platform)</li>
+                        <li>Multi-channel (web, email, chat)</li>
+                        <li>Conversion analytics dashboard</li>
+                    </ul>
+                    <a href="/form.html" class="btn btn-primary">Get Started →</a>
+                </div>
+                <div class="package-card fade-up">
+                    <div class="pkg-icon">📑</div>
+                    <h3>DocIntel</h3>
+                    <p class="desc">Reads contracts, invoices, and reports. Extracts key data. Organizes everything automatically.</p>
+                    <div class="price">$5,000<span>/mo</span></div>
+                    <ul class="features">
+                        <li>Contract & invoice parsing</li>
+                        <li>Key data extraction</li>
+                        <li>Date & obligation tracking</li>
+                        <li>Secure document storage</li>
+                        <li>Custom extraction rules</li>
+                    </ul>
+                    <a href="/form.html" class="btn btn-outline">Get Started →</a>
+                </div>
+                <div class="package-card fade-up">
+                    <div class="pkg-icon">🤖</div>
+                    <h3>SupportPilot</h3>
+                    <p class="desc">Handles 70% of customer support tickets autonomously. Escalates only what needs a human.</p>
+                    <div class="price">$5,000<span>+/mo</span></div>
+                    <ul class="features">
+                        <li>Autonomous ticket resolution</li>
+                        <li>Knowledge base integration</li>
+                        <li>Multi-language support</li>
+                        <li>Smart escalation to humans</li>
+                        <li>Customer satisfaction tracking</li>
+                    </ul>
+                    <a href="/form.html" class="btn btn-outline">Get Started →</a>
+                </div>
+                <div class="package-card fade-up">
+                    <div class="pkg-icon">✏️</div>
+                    <h3>ContentEngine</h3>
+                    <p class="desc">Research → write → optimize → publish. AI content production at scale, on brand.</p>
+                    <div class="price">$3,000<span>/mo</span></div>
+                    <ul class="features">
+                        <li>20+ articles per month</li>
+                        <li>SEO optimization built-in</li>
+                        <li>Brand voice matching</li>
+                        <li>Multi-platform publishing</li>
+                        <li>Performance analytics</li>
+                    </ul>
+                    <a href="/form.html" class="btn btn-outline">Get Started →</a>
+                </div>
+                <div class="package-card fade-up">
+                    <div class="pkg-icon">⚡</div>
+                    <h3>Custom AI Agent</h3>
+                    <p class="desc">Have a unique workflow? We'll build a custom AI agent tailored to your exact business process.</p>
+                    <div class="price">$10,000<span>+/mo</span></div>
+                    <ul class="features">
+                        <li>Fully custom workflow design</li>
+                        <li>Integration with your tools</li>
+                        <li>Multi-agent orchestration</li>
+                        <li>Dedicated support & optimization</li>
+                        <li>Monthly strategy reviews</li>
+                    </ul>
+                    <a href="/form.html" class="btn btn-outline">Get Started →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>How It Works</h2>
+                <p>From zero to AI-powered in 4 simple steps</p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card fade-up">
+                    <div class="step-number">1</div>
+                    <h3>Free AI Audit</h3>
+                    <p>We analyze your business and identify the top processes that can be automated with AI. No commitment.</p>
+                </div>
+                <div class="step-card fade-up">
+                    <div class="step-number">2</div>
+                    <h3>Build & Test</h3>
+                    <p>We build your AI agents on our platform, test them with real data, and refine until they're perfect.</p>
+                </div>
+                <div class="step-card fade-up">
+                    <div class="step-number">3</div>
+                    <h3>Deploy & Connect</h3>
+                    <p>We deploy your agents and connect them to your existing tools — email, CRM, website, whatever you use.</p>
+                </div>
+                <div class="step-card fade-up">
+                    <div class="step-number">4</div>
+                    <h3>Optimize & Scale</h3>
+                    <p>We monitor performance, optimize weekly, and scale as your business grows. You get monthly reports.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology -->
+    <section id="technology">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>Our Technology Stack</h2>
+                <p>Built on enterprise-grade infrastructure. No shortcuts.</p>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-card fade-up">
+                    <div class="tech-icon">🧠</div>
+                    <h4>25+ AI Models</h4>
+                    <p>OpenAI, Anthropic, Google, Mistral, Groq, Llama</p>
+                </div>
+                <div class="tech-card fade-up">
+                    <div class="tech-icon">⚙️</div>
+                    <h4>37 Agent Types</h4>
+                    <p>Pre-built agents for every business function</p>
+                </div>
+                <div class="tech-card fade-up">
+                    <div class="tech-icon">🔗</div>
+                    <h4>200+ API Endpoints</h4>
+                    <p>Full integration with your existing tools</p>
+                </div>
+                <div class="tech-card fade-up">
+                    <div class="tech-icon">📊</div>
+                    <h4>Real-time Analytics</h4>
+                    <p>ClickHouse-powered performance dashboards</p>
+                </div>
+                <div class="tech-card fade-up">
+                    <div class="tech-icon">🔒</div>
+                    <h4>Enterprise Security</h4>
+                    <p>Encrypted, isolated, SOC-2 ready</p>
+                </div>
+                <div class="tech-card fade-up">
+                    <div class="tech-icon">⚡</div>
+                    <h4>Sub-second Response</h4>
+                    <p>Redis caching + optimized inference</p>
+                </div>
+                <div class="tech-card fade-up">
+                    <div class="tech-icon">🔄</div>
+                    <h4>CI/CD Pipeline</h4>
+                    <p>Zero-downtime deployments, always up to date</p>
+                </div>
+                <div class="tech-card fade-up">
+                    <div class="tech-icon">🌐</div>
+                    <h4>Global CDN</h4>
+                    <p>Fast access from anywhere in the world</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies -->
+    <section id="case-studies">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>Real Results</h2>
+                <p>Don't take our word for it — here's what our clients achieved</p>
+            </div>
+            <div class="pain-grid">
+                <div class="pain-card fade-up">
+                    <div class="icon">🛒</div>
+                    <h3>E-Commerce Brand</h3>
+                    <p><strong>The Problem:</strong> Customer service team was drowning in 200+ emails/day. Response times averaged 4 hours.</p>
+                    <p><strong>The Solution:</strong> AI email triage agent that auto-sorts, prioritizes, and drafts replies for 80% of incoming messages.</p>
+                    <div class="stat">→ 15 hrs/week saved · Response time: 4hrs → 12min · CSAT +32%</div>
+                </div>
+                <div class="pain-card fade-up">
+                    <div class="icon">🚀</div>
+                    <h3>SaaS Startup</h3>
+                    <p><strong>The Problem:</strong> Leads were going cold. Sales team couldn't respond fast enough — average response time was 6 hours.</p>
+                    <p><strong>The Solution:</strong> 24/7 lead response bot that qualifies leads, answers questions, and books demos automatically.</p>
+                    <div class="stat">→ 3x more demos booked · 60-second avg response · 40% higher conversion</div>
+                </div>
+                <div class="pain-card fade-up">
+                    <div class="icon">📊</div>
+                    <h3>Consulting Firm</h3>
+                    <p><strong>The Problem:</strong> Junior staff spent 20+ hrs/week manually extracting data from contracts and invoices into spreadsheets.</p>
+                    <p><strong>The Solution:</strong> Document intelligence AI that reads, extracts, and organizes data from any PDF or scanned document.</p>
+                    <div class="stat">→ 20 hrs/week saved · 99.2% accuracy · Zero manual entry</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image fade-up">🦞</div>
+                <div class="about-text fade-up">
+                    <h2>Built by <span class="gradient">Abdelrahman Elhelw</span> & 3my AI</h2>
+                    <p>
+                        <strong>Abdelrahman Elhelw — Founder & AI Engineer</strong><br>
+                        OpenClaw specialist · Cybersecurity background · Builder of 10+ production AI agents
+                    </p>
+                    <p>
+                        I started 3my AI because I saw small businesses drowning in repetitive work while big companies had dedicated AI teams. Every business deserves automation — not just the ones with million-dollar budgets.
+                    </p>
+                    <p>
+                        Our autonomous AI agents built, deploy, and manage themselves 24/7. Powered by enterprise-grade infrastructure with 37 agent types, 200+ API endpoints, and support for 25+ AI models. We don't use cheap no-code tools — we build systems that scale.
+                    </p>
+                    <p>
+                        Based in Egypt, serving clients worldwide. We work across time zones because — well, the AI doesn't sleep. 🦞
+                    </p>
+                    <div class="about-stats">
+                        <div class="about-stat">
+                            <div class="num">10+</div>
+                            <div class="lbl">AI Agents Built</div>
+                        </div>
+                        <div class="about-stat">
+                            <div class="num">24/7</div>
+                            <div class="lbl">Autonomous Ops</div>
+                        </div>
+                        <div class="about-stat">
+                            <div class="num">99%</div>
+                            <div class="lbl">Client Satisfaction</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="contact" class="cta-section">
+        <div class="container">
+            <div class="cta-box fade-up">
+                <h2>Ready to <span class="gradient">Automate Your Business?</span></h2>
+                <p>
+                    Book a free AI Audit — we'll analyze your workflows and show you exactly where AI can save you time and money. 
+                    No commitment, no pitch. Just insights.
+                </p>
+                <div class="cta-buttons">
+                    <a href="https://t.me/Itselhelw" class="btn btn-primary">📱 Message on Telegram →</a>
+                    <a href="mailto:openclaw036@gmail.com" class="btn btn-outline">📧 Send Email</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="logo">3my AI</div>
+            <div class="footer-links">
+                <a href="#services">Services</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#about">About</a>
+                <a href="/form.html">Contact</a>
+            </div>
+            <div class="copy">© 2026 3my AI. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
