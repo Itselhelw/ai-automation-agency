@@ -1,0 +1,131 @@
+{
+  "name": "PeakFit Wellness — Email Triage Agent",
+  "nodes": [
+    {
+      "name": "Gmail Trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "position": [250, 300],
+      "parameters": {
+        "event": "messageReceived",
+        "options": {},
+        "filters": {
+          "labelIds": ["INBOX"]
+        }
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "peakfit-gmail",
+          "name": "PeakFit Gmail"
+        }
+      }
+    },
+    {
+      "name": "Classify Email",
+      "type": "n8n-nodes-base.openAi",
+      "position": [450, 300],
+      "parameters": {
+        "resource": "chat",
+        "operation": "complete",
+        "model": "gpt-3.5-turbo",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are an email classifier for PeakFit Wellness. Classify each incoming email into one of these categories:\n1. NEW_LEAD: Someone interested in wellness services\n2. EXISTING_CLIENT: Current client with questions/requests\n3. PARTNERSHIP: Business partnership or collaboration\n4. SPAM: Unsolicited marketing or irrelevant\n5. OTHER: Doesn't fit above categories\n\nRespond with ONLY the category name and a confidence score 0-100."
+            },
+            {
+              "role": "user",
+              "content": "Subject: {{ $json.subject }}\nFrom: {{ $json.from }}\nBody: {{ $json.textPlain.substring(0, 500) }}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Route by Category",
+      "type": "n8n-nodes-base.switch",
+      "position": [650, 300],
+      "parameters": {
+        "rules": {
+          "rules": [
+            { "outputKey": "NEW_LEAD", "conditions": { "string": [{ "value1": "={{ $json.content }}", "operation": "contains", "value2": "NEW_LEAD" }] } },
+            { "outputKey": "EXISTING_CLIENT", "conditions": { "string": [{ "value1": "={{ $json.content }}", "operation": "contains", "value2": "EXISTING_CLIENT" }] } },
+            { "outputKey": "PARTNERSHIP", "conditions": { "string": [{ "value1": "={{ $json.content }}", "operation": "contains", "value2": "PARTNERSHIP" }] } },
+            { "outputKey": "SPAM", "conditions": { "string": [{ "value1": "={{ $json.content }}", "operation": "contains", "value2": "SPAM" }] } }
+          ]
+        },
+        "options": { "fallbackOutput": "OTHER" }
+      }
+    },
+    {
+      "name": "Draft Reply — New Lead",
+      "type": "n8n-nodes-base.openAi",
+      "position": [850, 150],
+      "parameters": {
+        "resource": "chat",
+        "operation": "complete",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are the AI assistant for PeakFit Wellness. Draft a warm, professional reply to a new potential client. Include: 1) Thank them for their interest, 2) Brief intro to PeakFit (wellness & yoga studio), 3) Offer a free 15-min consultation call, 4) Include Calendly link placeholder. Keep it under 150 words."
+            },
+            {
+              "role": "user",
+              "content": "Original email:\nSubject: {{ $('Gmail Trigger').item.json.subject }}\nBody: {{ $('Gmail Trigger').item.json.textPlain.substring(0, 300) }}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Send Reply — New Lead",
+      "type": "n8n-nodes-base.gmail",
+      "position": [1050, 150],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "to": "={{ $('Gmail Trigger').item.json.from }}",
+        "subject": "Re: {{ $('Gmail Trigger').item.json.subject }}",
+        "message": "={{ $json.content }}",
+        "options": { "replyToSender": true }
+      }
+    },
+    {
+      "name": "Log to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [1250, 300],
+      "parameters": {
+        "operation": "append",
+        "sheetName": "PeakFit Leads",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $now.format('yyyy-MM-dd HH:mm') }}",
+            "From": "={{ $('Gmail Trigger').item.json.from }}",
+            "Subject": "={{ $('Gmail Trigger').item.json.subject }}",
+            "Category": "={{ $('Route by Category').item.json.outputKey }}",
+            "Status": "Auto-processed",
+            "Reply_Sent": "={{ $json.content ? 'Yes' : 'No' }}"
+          }
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Gmail Trigger": { "main": [[{ "node": "Classify Email", "type": "main", "index": 0 }]] },
+    "Classify Email": { "main": [[{ "node": "Route by Category", "type": "main", "index": 0 }]] },
+    "Route by Category": { "main": [
+      [{ "node": "Draft Reply — New Lead", "type": "main", "index": 0 }],
+      [{ "node": "Log to Google Sheets", "type": "main", "index": 0 }],
+      [{ "node": "Log to Google Sheets", "type": "main", "index": 0 }],
+      [{ "node": "Log to Google Sheets", "type": "main", "index": 0 }],
+      [{ "node": "Log to Google Sheets", "type": "main", "index": 0 }]
+    ]},
+    "Draft Reply — New Lead": { "main": [[{ "node": "Send Reply — New Lead", "type": "main", "index": 0 }]] },
+    "Send Reply — New Lead": { "main": [[{ "node": "Log to Google Sheets", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "staticData": null,
+  "tags": ["PeakFit", "Email Triage", "Starter Package"]
+}

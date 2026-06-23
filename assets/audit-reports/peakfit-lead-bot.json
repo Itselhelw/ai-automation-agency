@@ -1,0 +1,106 @@
+{
+  "name": "PeakFit Wellness — Lead Response Bot",
+  "nodes": [
+    {
+      "name": "Webhook — New Lead",
+      "type": "n8n-nodes-base.webhook",
+      "position": [250, 300],
+      "parameters": {
+        "path": "peakfit-new-lead",
+        "httpMethod": "POST",
+        "responseMode": "onReceived",
+        "options": {}
+      }
+    },
+    {
+      "name": "Enrich Lead Data",
+      "type": "n8n-nodes-base.set",
+      "position": [450, 300],
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "lead_name", "value": "={{ $json.body.name || $json.body.lead_name || 'there' }}" },
+            { "name": "lead_email", "value": "={{ $json.body.email || $json.body.lead_email }}" },
+            { "name": "lead_source", "value": "={{ $json.body.source || 'website' }}" },
+            { "name": "received_at", "value": "={{ $now.format('yyyy-MM-dd HH:mm:ss') }}" },
+            { "name": "status", "value": "new" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Send Welcome Email",
+      "type": "n8n-nodes-base.gmail",
+      "position": [650, 300],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "to": "={{ $json.lead_email }}",
+        "subject": "Welcome to PeakFit Wellness! 🧘",
+        "message": "Hi {{ $json.lead_name }},\n\nWelcome to PeakFit Wellness! We're excited to help you on your wellness journey.\n\nHere's what happens next:\n1. 📞 We'll reach out within 24 hours to schedule your free consultation\n2. 🧘 You'll get a personalized wellness plan\n3. 💪 Start your journey to better health\n\nIn the meantime, check out our services:\n- Yoga Classes\n- Wellness Coaching\n- Nutrition Planning\n\nReply to this email with any questions!\n\nBest,\nThe PeakFit Team\n📧 hello@peakfit.com\n🌐 https://peakfit.com"
+      }
+    },
+    {
+      "name": "Notify Owner (Telegram)",
+      "type": "n8n-nodes-base.telegram",
+      "position": [850, 300],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "chatId": "{{ $env.PEAKFIT_TELEGRAM_CHAT_ID }}",
+        "text": "🧘 New PeakFit Lead!\n\nName: {{ $json.lead_name }}\nEmail: {{ $json.lead_email }}\nSource: {{ $json.lead_source }}\nTime: {{ $json.received_at }}\n\nWelcome email sent ✅"
+      }
+    },
+    {
+      "name": "Add to CRM (Google Sheets)",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [1050, 300],
+      "parameters": {
+        "operation": "append",
+        "sheetName": "Leads",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.lead_name }}",
+            "Email": "={{ $json.lead_email }}",
+            "Source": "={{ $json.lead_source }}",
+            "Date": "={{ $json.received_at }}",
+            "Status": "Contacted",
+            "Next_Follow_Up": "={{ $now.plus(3, 'days').format('yyyy-MM-dd') }}"
+          }
+        }
+      }
+    },
+    {
+      "name": "Wait 3 Days",
+      "type": "n8n-nodes-base.wait",
+      "position": [1250, 300],
+      "parameters": {
+        "amount": 3,
+        "unit": "days"
+      }
+    },
+    {
+      "name": "Follow-Up Email",
+      "type": "n8n-nodes-base.gmail",
+      "position": [1450, 300],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "to": "={{ $('Enrich Lead Data').item.json.lead_email }}",
+        "subject": "Following up — your PeakFit journey 🧘",
+        "message": "Hi {{ $('Enrich Lead Data').item.json.lead_name }},\n\nJust checking in! Did you get a chance to think about starting your wellness journey with PeakFit?\n\nWe still have spots available for new members this month. Here's what you get:\n- Free 30-min consultation\n- Personalized wellness plan\n- First week free\n\nReply to this email or book directly: [Calendly Link]\n\nLooking forward to hearing from you!\n\nBest,\nThe PeakFit Team"
+      }
+    }
+  ],
+  "connections": {
+    "Webhook — New Lead": { "main": [[{ "node": "Enrich Lead Data", "type": "main", "index": 0 }]] },
+    "Enrich Lead Data": { "main": [[{ "node": "Send Welcome Email", "type": "main", "index": 0 }]] },
+    "Send Welcome Email": { "main": [[{ "node": "Notify Owner (Telegram)", "type": "main", "index": 0 }]] },
+    "Notify Owner (Telegram)" : { "main": [[{ "node": "Add to CRM (Google Sheets)", "type": "main", "index": 0 }]] },
+    "Add to CRM (Google Sheets)": { "main": [[{ "node": "Wait 3 Days", "type": "main", "index": 0 }]] },
+    "Wait 3 Days": { "main": [[{ "node": "Follow-Up Email", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": ["PeakFit", "Lead Response", "Starter Package"]
+}
