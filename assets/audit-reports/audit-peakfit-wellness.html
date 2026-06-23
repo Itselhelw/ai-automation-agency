@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Audit Report — PeakFit Wellness | 3my AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #060609; --bg2: #0c0c14; --card: #111118; --border: #1a1a2e;
+    --text: #e8e8f0; --text2: #8888a0; --text3: #555570;
+    --accent: #6366f1; --accent2: #818cf8; --green: #10b981; --yellow: #f59e0b; --red: #ef4444;
+    --gradient: linear-gradient(135deg, #6366f1 0%, #06b6d4 50%, #10b981 100%);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+.container { max-width: 800px; margin: 0 auto; padding: 60px 24px; }
+.header { text-align: center; margin-bottom: 48px; }
+.badge { display: inline-block; padding: 6px 16px; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3); border-radius: 100px; font-size: 0.8rem; font-weight: 600; color: var(--accent2); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.05em; }
+h1 { font-size: 2.2rem; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 16px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.subtitle { color: var(--text2); font-size: 1.1rem; }
+.meta { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-top: 24px; padding: 16px; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; }
+.meta span { font-size: 0.85rem; color: var(--text2); }
+.meta strong { color: var(--text); }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+.card h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: 16px; }
+.card p { color: var(--text2); margin-bottom: 12px; }
+.highlight { color: var(--text); font-weight: 600; }
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0; }
+.stat-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+.stat-box .number { font-size: 1.8rem; font-weight: 900; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.stat-box .label { font-size: 0.8rem; color: var(--text2); margin-top: 4px; }
+.automation-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 12px; }
+.automation-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+.automation-card p { font-size: 0.9rem; color: var(--text2); margin-bottom: 8px; }
+.impact { font-size: 0.85rem; color: var(--green); font-weight: 600; }
+.package { background: var(--bg2); border: 2px solid var(--accent); border-radius: 16px; padding: 32px; text-align: center; margin: 24px 0; }
+.package h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+.package .price { font-size: 2rem; font-weight: 900; color: var(--green); margin: 12px 0; }
+.package .includes { text-align: left; margin: 20px 0; }
+.package .includes li { padding: 6px 0; color: var(--text2); font-size: 0.9rem; list-style: none; }
+.package .includes li::before { content: "✓ "; color: var(--green); font-weight: 700; }
+.cta { text-align: center; padding: 48px 32px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; margin: 32px 0; }
+.cta h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; }
+.cta p { color: var(--text2); margin-bottom: 24px; }
+.btn { display: inline-block; padding: 14px 32px; background: var(--gradient); color: #fff; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 1rem; margin: 8px; }
+.btn-outline { background: transparent; border: 2px solid var(--accent); color: var(--accent2); }
+.footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.85rem; }
+.footer a { color: var(--accent2); text-decoration: none; }
+@media (max-width: 600px) { .stat-grid { grid-template-columns: 1fr; } h1 { font-size: 1.6rem; } }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="badge">AI Audit Report</div>
+        <h1>PeakFit Wellness Automation Roadmap</h1>
+        <p class="subtitle">Personalized analysis & implementation plan by 3my AI</p>
+        <div class="meta">
+            <span><strong>Company:</strong> PeakFit Wellness</span>
+            <span><strong>Contact:</strong> Abdelrahman Elhelw (founder)</span>
+            <span><strong>Date:</strong> June 16, 2026</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>📊 Executive Summary</h2>
+        <p>Based on your submission, <span class="highlight">PeakFit Wellness</span> is a 1-10-person team with key operational challenges around <span class="highlight">We spend too much time manually creating workout plans and tracking client progress. We want to automate client onboarding</span>.</p>
+        <p>We've identified <span class="highlight">2 high-impact automation opportunities</span> that can save your team significant time and directly impact revenue.</p>
+        <div class="stat-grid">
+            <div class="stat-box"><div class="number">2</div><div class="label">Opportunities</div></div>
+            <div class="stat-box"><div class="number">2-4</div><div class="label">Weeks to Launch</div></div>
+            <div class="stat-box"><div class="number">100%</div><div class="label">Free to Start</div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>🎯 Recommended Automations</h2>
+        
+        <div class="automation-card">
+            <h4>Email Triage Agent</h4>
+            <p>Auto-sorts, prioritizes, and drafts replies for 80% of your emails</p>
+            <div class="impact">→ 10-15 hrs/week</div>
+        </div>
+        <div class="automation-card">
+            <h4>Lead Response Bot</h4>
+            <p>Instantly responds to new leads, qualifies them, and books meetings</p>
+            <div class="impact">→ 3x more demos</div>
+        </div>
+    </div>
+
+    <div class="package">
+        <div class="badge">Recommended Package</div>
+        <h3>Starter</h3>
+        <div class="price">$2,000/mo</div>
+        <p style="color: var(--text2);">Everything you need to get started</p>
+        <ul class="includes">
+            <li>All recommended automations above</li>
+            <li>24/7 monitoring & maintenance</li>
+            <li>Weekly performance reports</li>
+            <li>Unlimited adjustments (first 30 days)</li>
+            <li>Direct support via Telegram</li>
+            <li>Free setup & onboarding</li>
+        </ul>
+    </div>
+
+    <div class="cta">
+        <h2>Ready to automate PeakFit Wellness?</h2>
+        <p>This audit is 100% free. No commitment. If we work together, this becomes your onboarding document.</p>
+        <a href="mailto:openclaw036@gmail.com?subject=RE: AI Audit for PeakFit Wellness — I'm Interested&body=Hi Abdelrahman,%0A%0AI've reviewed the AI Audit for PeakFit Wellness and I'm interested in moving forward with the Starter package.$2,000/mo.%0A%0ALet's schedule a call.%0A%0AThanks,%0AAbdelrahman Elhelw" class="btn">✅ I'm Interested — Let's Talk</a>
+        <a href="mailto:openclaw036@gmail.com?subject=RE: AI Audit for PeakFit Wellness — Have Questions&body=Hi Abdelrahman,%0A%0AI've reviewed the AI Audit and have some questions before deciding.%0A%0A[Your questions here]%0A%0AThanks,%0AAbdelrahman Elhelw" class="btn btn-outline">❓ I Have Questions</a>
+        <a href="mailto:openclaw036@gmail.com?subject=RE: AI Audit for PeakFit Wellness — Not Right Now&body=Hi Abdelrahman,%0A%0AThanks for the audit. Not the right time for us right now, but keep me in mind for the future.%0A%0AThanks,%0AAbdelrahman Elhelw" class="btn btn-outline">⏳ Not Right Now</a>
+    </div>
+
+    <div class="footer">
+        <p><strong>Abdelrahman Elhelw</strong> — Founder, 3my AI</p>
+        <p>📧 openclaw036@gmail.com &nbsp;|&nbsp; 💬 <a href="https://t.me/Itselhelw">Telegram: @Itselhelw</a> &nbsp;|&nbsp; 🌐 <a href="https://agency.ghosttrace.tech">agency.ghosttrace.tech</a></p>
+        <p style="margin-top: 12px;">© 2026 3my AI. All rights reserved.</p>
+    </div>
+</div>
+</body>
+</html>
